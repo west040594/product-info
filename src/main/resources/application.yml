@@ -1,0 +1,51 @@
+server:
+  port: 8083
+
+
+postgresql:
+  host: localhost
+  port: 5432
+  defaultschema: public
+  database: productdb
+  username: west223
+  password: westwest223
+
+rabbit:
+  parser:
+    exchange: REVIEW.PARSE
+    inQueue: REVIEW.PARSE.RS
+    outQueue: REVIEW.PARSE.RQ
+
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: west223
+    password: westwest223
+  datasource:
+    url: jdbc:postgresql://${postgresql.host}:${postgresql.port}/${postgresql.database}
+    driver-class-name: org.postgresql.Driver
+    username: ${postgresql.username}
+    password: ${postgresql.password}
+  liquibase:
+    change-log: classpath:/liquibase/root-changelog.xml
+    contexts: schema
+    default-schema: ${postgresql.defaultschema}
+    enabled: true
+    url: jdbc:postgresql://${postgresql.host}:${postgresql.port}/${postgresql.database}
+    user: ${postgresql.username}
+    password: ${postgresql.password}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    show-sql: false
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: true
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false

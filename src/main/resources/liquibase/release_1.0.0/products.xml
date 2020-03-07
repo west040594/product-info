@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet author="shtylev_semen" id="create_basic_tables">
+        <comment>create common tables</comment>
+
+        <createTable tableName="tb_category">
+            <column name="id" type="serial" autoIncrement="true" remarks="">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+
+            <column name="name" type="varchar(255)"
+                    remarks="" >
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="alias" type="varchar(255)"
+                    remarks="" >
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="image_url" type="varchar(512)"
+                    remarks="" >
+                <constraints nullable="true" />
+            </column>
+
+            <column name="status" type="varchar(1)" remarks="D - DISABLED A - ACTIVE" defaultValue="A">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="create_time" type="bigint" defaultValueComputed="${now}"
+                    remarks="">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="last_modify_time" type="bigint" defaultValueComputed="${now}"
+                    remarks="">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="tb_product">
+
+            <column name="id" type="serial" autoIncrement="true"
+                    remarks="">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+
+            <column name="name" type="varchar(255)"
+                    remarks="" >
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="category_id" type="int" remarks="">
+                <constraints nullable="true" foreignKeyName="fk_category_product" references="tb_category(id)" deleteCascade="true"  />
+            </column>
+
+            <column name="description" type="clob">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="average_price" type="decimal(12,2)"
+                    remarks="" >
+                <constraints nullable="true" />
+            </column>
+
+            <column name="image_url" type="varchar(512)"
+                    remarks="" >
+                <constraints nullable="true" />
+            </column>
+
+            <column name="rating" type="decimal(4,2)" remarks="">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="status" type="varchar(1)" remarks="D - DISABLED A - ACTIVE" defaultValue="A">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="is_fill" type="boolean" defaultValueComputed="false"
+                    remarks="">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="create_time" type="bigint" defaultValueComputed="${now}"
+                    remarks="">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="last_modify_time" type="bigint" defaultValueComputed="${now}"
+                    remarks="">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_by" type="varchar(255)" remarks="">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="last_modified_by" type="varchar(255)" remarks="">
+                <constraints nullable="true"/>
+            </column>
+
+        </createTable>
+
+        <createTable tableName="tb_review_system_link">
+            <column name="id" type="serial" autoIncrement="true" remarks="">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="name" type="varchar(255)"
+                    remarks="" >
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="review_system" type="varchar(255)" remarks="" >
+                <constraints nullable="false" />
+            </column>
+
+            <column name="product_id" type="int" remarks="">
+                <constraints nullable="true" foreignKeyName="fk_product_review_system_link" references="tb_product(id)" deleteCascade="true"  />
+            </column>
+        </createTable>
+
+        <createTable tableName="tb_review">
+
+            <column name="id" type="serial" autoIncrement="true" remarks="">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+
+            <column name="title" type="varchar(1024)" remarks="" >
+                <constraints nullable="false" />
+            </column>
+
+            <column name="body" type="clob">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="rating" type="decimal(4,2)" remarks="">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="post_time" type="bigint"
+                    remarks="">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="reviewer_name" type="varchar(255)" remarks="">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="read_link" type="varchar(512)" remarks="" >
+                <constraints nullable="false" />
+            </column>
+
+            <column name="review_system" type="varchar(255)" remarks="" >
+                <constraints nullable="false" />
+            </column>
+
+            <column name="status" type="varchar(1)" remarks="D - DISABLED A - ACTIVE" defaultValue="A">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="create_time" type="bigint" defaultValueComputed="${now}"
+                    remarks="">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="last_modify_time" type="bigint" defaultValueComputed="${now}"
+                    remarks="">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="product_id" type="int" remarks="">
+                <constraints nullable="true" foreignKeyName="fk_product_review" references="tb_product(id)" deleteCascade="true" />
+            </column>
+
+        </createTable>
+
+        <createTable tableName="tb_quality">
+            <column name="id" type="serial" autoIncrement="true" remarks="">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="name" type="varchar(255)"
+                    remarks="" >
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="type" type="varchar(5)" remarks="" >
+                <constraints nullable="false" />
+            </column>
+
+            <column name="status" type="varchar(1)" remarks="D - DISABLED A - ACTIVE" defaultValue="A">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="create_time" type="bigint" defaultValueComputed="${now}"
+                    remarks="">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="last_modify_time" type="bigint" defaultValueComputed="${now}"
+                    remarks="">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <createTable tableName="tb_review_quality">
+            <column name="review_id" type="int" remarks="">
+                <constraints nullable="false" foreignKeyName="fk_review_quality_review" references="tb_review(id)" deleteCascade="true" />
+            </column>
+            <column name="quality_id" type="int" remarks="true">
+                <constraints nullable="false" foreignKeyName="fk_review_quality_quality" references="tb_quality(id)" deleteCascade="true" />
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="tb_review_quality" columnNames="review_id, quality_id" constraintName="pk_composite_review_quality"/>
+
+        <addUniqueConstraint tableName="tb_quality" columnNames="name, type" constraintName="unique_name_type"/>
+
+    </changeSet>
+
+</databaseChangeLog>
