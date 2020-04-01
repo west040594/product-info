@@ -20,6 +20,13 @@ public interface ProductService {
     List<Product> findAllByNames(List<String> names);
 
     /**
+     * Найти продукт в базе по его наименованию
+     * @param name Наименование продукта
+     * @return Найденный продукт
+     */
+    Product findByName(String name);
+
+    /**
      * Найти продукт в базе по его id
      * @param id Id продукта
      * @return Найденный продукт
@@ -32,6 +39,15 @@ public interface ProductService {
      * @return Найденные продукты
      */
     List<Product> findByCategoryName(String categoryName);
+
+
+    /**
+     * Найти продукты в базе по псевдониму категории
+     * @param categoryAlias Псевдоним категории продукта
+     * @return Найденные продукты
+     */
+    List<Product> findByCategoryAlias(String categoryAlias);
+
 
     /**
      * Добавление нового продукта в базу данных

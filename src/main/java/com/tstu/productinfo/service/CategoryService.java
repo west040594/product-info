@@ -19,6 +19,13 @@ public interface CategoryService {
     Category findByName(String name);
 
     /**
+     * Найти категорию по псевдониму
+     * @param alias Псевдоним категория
+     * @return Найденная категория
+     */
+    Category findByAlias(String alias);
+
+    /**
      * Найти категорию в базе по его id
      * @param id Id категории
      * @return Найденная категория

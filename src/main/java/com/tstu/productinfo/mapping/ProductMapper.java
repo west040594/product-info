@@ -73,7 +73,7 @@ public interface ProductMapper {
                 .collect(Collectors.toSet());
         product.setReviewSystemLinks(reviewSystemLinks);
 
-        product.setCategory(categoryService.findByName(productDataRequest.getCategory()));
+        product.setCategory(categoryService.findByAlias(productDataRequest.getCategory()));
     }
 
 

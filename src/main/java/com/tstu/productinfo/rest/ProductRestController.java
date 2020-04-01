@@ -62,17 +62,42 @@ public class ProductRestController {
         return ResponseEntity.ok(productResponse);
     }
 
+
+    /**
+     * Получение конкретного продукта по его наименованию
+     * @param name Наименование продукта
+     * @return Структура ответа с найденным продуктом
+     */
+    @GetMapping("/name/{name}")
+    public ResponseEntity<?> getProductByName(@PathVariable("name") String name) {
+        ProductResponse productResponse = productMapper.productToProductResponse(productService.findByName(name));
+        return ResponseEntity.ok(productResponse);
+    }
+
     /**
      * Получение продуктов по их категории
      * @param categoryName Категория продуктов
      * @return Структура ответа с найденными продуктами
      */
     @GetMapping("/category/{categoryName}")
-    public ResponseEntity<?> getProductByCategoryName(@PathVariable("categoryName") String categoryName) {
+    public ResponseEntity<?> getProductsByCategoryName(@PathVariable("categoryName") String categoryName) {
         List<ProductResponse> productsByCategory = productService.findByCategoryName(categoryName).stream()
                 .map(productMapper::productToProductResponse)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(productsByCategory);
+    }
+
+    /**
+     * Получение продуктов по псевдониму категории
+     * @param categoryAlias Псевдоим категории продуктов
+     * @return Структура ответа с найденными продуктами
+     */
+    @GetMapping("/category/alias/{categoryAlias}")
+    public ResponseEntity<?> getProductsByCategoryAlias(@PathVariable("categoryAlias") String categoryAlias) {
+        List<ProductResponse> productsByCategoryAlias = productService.findByCategoryAlias(categoryAlias).stream()
+                .map(productMapper::productToProductResponse)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(productsByCategoryAlias);
     }
 
     /**

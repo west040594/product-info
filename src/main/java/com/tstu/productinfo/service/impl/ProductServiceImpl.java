@@ -41,6 +41,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Product findByName(String name) {
+        log.info("Поиск продукта по наименованию - {}", name);
+        Product product = productRepository.findByName(name)
+                .orElseThrow(() -> new PrsHttpException(ProductInfoErrors.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND));
+        log.info("Найденный продукт - {}", product);
+        return product;
+    }
+
+    @Override
     public Product findById(Long id) {
         log.info("Поиск продукта по id - {}", id);
         Product product = productRepository.findById(id)
@@ -56,6 +65,15 @@ public class ProductServiceImpl implements ProductService {
         log.info("Продукты найдены - {}", productsByCategory.stream().map(Product::getName).collect(Collectors.toList()));
         return productsByCategory;
     }
+
+    @Override
+    public List<Product> findByCategoryAlias(String categoryAlias) {
+        log.info("Поиск продукта по псевдониму категории - {}", categoryAlias);
+        List<Product> productsByCategory = productRepository.findByCategory_alias(categoryAlias);
+        log.info("Продукты найдены - {}", productsByCategory.stream().map(Product::getName).collect(Collectors.toList()));
+        return productsByCategory;
+    }
+
 
     @Override
     public Product create(Product product) {

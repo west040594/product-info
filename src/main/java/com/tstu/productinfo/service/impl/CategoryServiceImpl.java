@@ -37,6 +37,15 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Category findByAlias(String alias) {
+        log.info("Поиск категории по псевдониму - {}", alias);
+        Category category = categoryRepository.findByAlias(alias)
+                .orElseThrow(() -> new PrsHttpException(ProductInfoErrors.CATEGORY_NOT_FOUND, HttpStatus.NOT_FOUND));;
+        log.info("Найденная категория - {}", category);
+        return category;
+    }
+
+    @Override
     public Category findById(Long id) {
         log.info("Поиск категории по id - {}", id);
         Category category = categoryRepository.findById(id)

@@ -66,6 +66,7 @@ public class ParseResponseProcessingServiceImpl implements ParseResponseProcessi
      * @param response Структура ответа парсинг сервиса
      */
     private void processParseResponse(ProductParseResponse response) {
+        log.info("Получена информация о продукте из review-dom-parser. Отзывы - {}. Рейтинг - {}", response.getReviews().size(), response.getRating());
         Product product = productService.findById(response.getProductId());
         product.setFill(true);
         product.setImageUrl(response.getImageUrl());
@@ -73,7 +74,7 @@ public class ParseResponseProcessingServiceImpl implements ParseResponseProcessi
         saveAllQualities(response);
         product.setReviews(formReviews(response));
         Product updatedProduct = productService.update(product);
-        log.info("Изменение продукта - {}", updatedProduct);
+        log.info("Вносим изменение  в продукт - {}", updatedProduct);
     }
 
     /**
