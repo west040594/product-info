@@ -40,7 +40,7 @@ public class ProductRestController {
      * @return Структура ответа нового продукта
      */
     @PostMapping("/create")
-    @ApiOperation(value = "${ProductRestController.create}")
+    @ApiOperation(value = "${api.swagger.product.create}", response = ProductResponse.class)
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = ProductInfoExceptionMessage.UNEXPECTED_ERROR_MSG),
             @ApiResponse(code = 422, message = ProductInfoExceptionMessage.UNABLE_TO_PROCESS_DATA),
@@ -56,6 +56,11 @@ public class ProductRestController {
      * @param id Id продукта
      * @return Структура ответа с найденным продуктом
      */
+    @ApiOperation(value = "${api.swagger.product.id}", response = ProductResponse.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = ProductInfoExceptionMessage.UNEXPECTED_ERROR_MSG),
+            @ApiResponse(code = 404, message = ProductInfoExceptionMessage.PRODUCT_NOT_FOUND_MSG),
+    })
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable("id") Long id) {
         ProductResponse productResponse = productMapper.productToProductResponse(productService.findById(id));
@@ -68,6 +73,11 @@ public class ProductRestController {
      * @param name Наименование продукта
      * @return Структура ответа с найденным продуктом
      */
+    @ApiOperation(value = "${api.swagger.product.name}", response = ProductResponse.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = ProductInfoExceptionMessage.UNEXPECTED_ERROR_MSG),
+            @ApiResponse(code = 404, message = ProductInfoExceptionMessage.PRODUCT_NOT_FOUND_MSG),
+    })
     @GetMapping("/name/{name}")
     public ResponseEntity<?> getProductByName(@PathVariable("name") String name) {
         ProductResponse productResponse = productMapper.productToProductResponse(productService.findByName(name));
@@ -79,6 +89,10 @@ public class ProductRestController {
      * @param categoryName Категория продуктов
      * @return Структура ответа с найденными продуктами
      */
+    @ApiOperation(value = "${api.swagger.product.category.name}", response = ProductResponse.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = ProductInfoExceptionMessage.UNEXPECTED_ERROR_MSG),
+    })
     @GetMapping("/category/{categoryName}")
     public ResponseEntity<?> getProductsByCategoryName(@PathVariable("categoryName") String categoryName) {
         List<ProductResponse> productsByCategory = productService.findByCategoryName(categoryName).stream()
@@ -92,6 +106,10 @@ public class ProductRestController {
      * @param categoryAlias Псевдоим категории продуктов
      * @return Структура ответа с найденными продуктами
      */
+    @ApiOperation(value = "${api.swagger.product.category.alias}", response = ProductResponse.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = ProductInfoExceptionMessage.UNEXPECTED_ERROR_MSG),
+    })
     @GetMapping("/category/alias/{categoryAlias}")
     public ResponseEntity<?> getProductsByCategoryAlias(@PathVariable("categoryAlias") String categoryAlias) {
         List<ProductResponse> productsByCategoryAlias = productService.findByCategoryAlias(categoryAlias).stream()
@@ -104,6 +122,10 @@ public class ProductRestController {
      * Получение всех возможных продуктов
      * @return Структура ответа со списком продуктов
      */
+    @ApiOperation(value = "${api.swagger.product.all}", response = ProductResponse.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = ProductInfoExceptionMessage.UNEXPECTED_ERROR_MSG),
+    })
     @GetMapping
     public ResponseEntity<?> getAllProducts() {
         List<ProductResponse> products = productService.findAll().stream()
@@ -117,6 +139,10 @@ public class ProductRestController {
      * @param productNames Список наименований продуктов
      * @return Стуктура ответа со найденными продуктами
      */
+    @ApiOperation(value = "${api.swagger.product.name-list}", response = ProductResponse.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = ProductInfoExceptionMessage.UNEXPECTED_ERROR_MSG),
+    })
     @PostMapping("/predict")
     public ResponseEntity<?> getAllProductsByPredict(@RequestBody List<String> productNames) {
         List<ProductResponse> products = productService.findAllByNames(productNames).stream()
@@ -130,12 +156,17 @@ public class ProductRestController {
      * @param productId Id продукта
      * @return Структура ответа с информацией, что запрос был отправлен
      */
+    @ApiOperation(value = "${api.swagger.product.parse}", response = String.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = ProductInfoExceptionMessage.UNEXPECTED_ERROR_MSG),
+            @ApiResponse(code = 404, message = ProductInfoExceptionMessage.PRODUCT_NOT_FOUND_MSG),
+    })
     @PostMapping("/parse")
     public ResponseEntity<?> sendDomParserRequest(@RequestBody Long productId) {
         Product product = productService.findById(productId);
         parseRequestService.execute(product);
         log.info("Запрос в review-dom-parser по продукту - {} отправлен", product.getName());
-        return new ResponseEntity<String>("Запрос отправлен", HttpStatus.ACCEPTED);
+        return new ResponseEntity<String>("Запрос в review-dom-parser отправлен", HttpStatus.ACCEPTED);
     }
 
     /**
@@ -143,10 +174,14 @@ public class ProductRestController {
      * @param id Id продукта
      * @return Структура ответа с информацией, что запрос на удаление был произведен
      */
+    @ApiOperation(value = "${api.swagger.product.delete}", response = String.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = ProductInfoExceptionMessage.UNEXPECTED_ERROR_MSG),
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
         productService.deleteById(id);
-        return ResponseEntity.ok("Запись удалена");
+        return ResponseEntity.ok(String.format("Продукт c id - %s успешно удален", id));
     }
 
 }

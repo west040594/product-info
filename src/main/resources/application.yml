@@ -49,3 +49,26 @@ spring:
       hibernate:
         temp:
           use_jdbc_metadata_defaults: false
+logging:
+  pattern:
+    console: %d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level %logger{15} - %msg%n
+
+api:
+  swagger:
+    category:
+      create: Добавить новую категорию
+      id:  Найти категорию по id
+      name: Найти категорию по имени
+      all: Найти все категории
+      delete: Удалить категорию
+    product:
+      create: Добавить новый продукт
+      all: Найти все продукты
+      name: Найти продукт по имени
+      name-list: Найти продукты по наименованиям
+      delete: Удалить продукт
+      id: Найти продукт по id
+      parse: Запустить процесс парсинга отзывов по id продукта
+      category:
+        name: Найти продукты по наименованию категории
+        alias: Найти продукту по псевдониму категории

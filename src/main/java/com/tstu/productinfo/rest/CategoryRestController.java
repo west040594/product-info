@@ -33,7 +33,7 @@ public class CategoryRestController {
      * @return Структура ответа новой категории
      */
     @PostMapping("/create")
-    @ApiOperation(value = "${CategoryRestController.create}")
+    @ApiOperation(value = "${api.swagger.product.category.create}", response = CategoryResponse.class)
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = ProductInfoExceptionMessage.UNEXPECTED_ERROR_MSG),
             @ApiResponse(code = 422, message = ProductInfoExceptionMessage.UNABLE_TO_PROCESS_DATA),
@@ -49,6 +49,11 @@ public class CategoryRestController {
      * @param id Id категории
      * @return Структура ответа с найденной категорией
      */
+    @ApiOperation(value = "${api.swagger.product.category.id}", response = CategoryResponse.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = ProductInfoExceptionMessage.UNEXPECTED_ERROR_MSG),
+            @ApiResponse(code = 404, message = ProductInfoExceptionMessage.CATEGORY_NOT_FOUND_MSG),
+    })
     @GetMapping("/{id}")
     public ResponseEntity<?> getCategoryById(@PathVariable Long id) {
         CategoryResponse categoryResponse = categoryMapper.categoryToCategoryResponse(categoryService.findById(id));
@@ -60,6 +65,11 @@ public class CategoryRestController {
      * @param name Наименование категории
      * @return Структура ответа с найденной категорией
      */
+    @ApiOperation(value = "${api.swagger.product.category.name}", response = CategoryResponse.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = ProductInfoExceptionMessage.UNEXPECTED_ERROR_MSG),
+            @ApiResponse(code = 404, message = ProductInfoExceptionMessage.CATEGORY_NOT_FOUND_MSG),
+    })
     @GetMapping("/name/{name}")
     public ResponseEntity<?> getCategoryByName(@PathVariable String name) {
         CategoryResponse categoryResponse = categoryMapper.categoryToCategoryResponse(categoryService.findByName(name));
@@ -70,6 +80,10 @@ public class CategoryRestController {
      * Получение всех возможных категорий
      * @return Структура ответа со списком категорий
      */
+    @ApiOperation(value = "${api.swagger.product.category.all}", response = CategoryResponse.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = ProductInfoExceptionMessage.UNEXPECTED_ERROR_MSG),
+    })
     @GetMapping
     public ResponseEntity<?> getAllCategories() {
         List<CategoryResponse> categories = categoryService.findAll().stream()
@@ -84,9 +98,13 @@ public class CategoryRestController {
      * @param id Id категории
      * @return Структура ответа с информацией, что запрос на удаление был произведен
      */
+    @ApiOperation(value = "${api.swagger.product.category.delete}", response = String.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = ProductInfoExceptionMessage.UNEXPECTED_ERROR_MSG),
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCategoryById(@PathVariable("id") Long id) {
         categoryService.deleteById(id);
-        return ResponseEntity.ok("Запись удалена");
+        return ResponseEntity.ok(String.format("Категория c id - %s успешна удалена", id));
     }
 }
